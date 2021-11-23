@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!-- plugin services -->
+        <service id="ost_emotion.emotion_service" class="OstEmotion\Services\EmotionService">
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="db" />
+        </service>
+
+        <!-- frontend and backend controller listeners -->
+        <service id="ost_emotion.listeners.controllers.frontend" class="OstEmotion\Listeners\Controllers\Frontend">
+            <argument type="service" id="ost_emotion.emotion_service" />
+            <argument type="string">%ost_emotion.view_dir%</argument>
+            <tag name="shopware.event_listener" method="onPostDispatch" event="Enlight_Controller_Action_PostDispatch_Frontend" />
+        </service>
+
+        <service id="ost_emotion.listeners.controllers.frontend.pre_dispatch" class="OstEmotion\Listeners\Controllers\Frontend">
+            <argument type="service" id="ost_emotion.emotion_service" />
+            <argument type="string">%ost_emotion.view_dir%</argument>
+            <tag name="shopware.event_listener" method="onPreDispatch" event="Enlight_Controller_Action_PreDispatch_Frontend" />
+        </service>
+
+    </services>
+
+</container>
